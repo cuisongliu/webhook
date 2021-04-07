@@ -1,0 +1,87 @@
+apiVersion: v1
+items:
+- apiVersion: admissionregistration.k8s.io/v1beta1
+  kind: MutatingWebhookConfiguration
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"admissionregistration.k8s.io/v1beta1","kind":"MutatingWebhookConfiguration","metadata":{"annotations":{},"name":"mutating-cfg"},"webhooks":[{"clientConfig":{"caBundle":"Cg==","service":{"name":"webhook-service","namespace":"system","path":"/mutate-time-core-v1-pod"}},"failurePolicy":"Ignore","name":"mpod.time.kb.io","rules":[{"apiGroups":[""],"apiVersions":["v1"],"operations":["CREATE","UPDATE"],"resources":["pods"]}]}]}
+    creationTimestamp: "2021-04-07T07:22:48Z"
+    generation: 2
+    name: mutating-cfg
+    resourceVersion: "70813323"
+    selfLink: /apis/admissionregistration.k8s.io/v1beta1/mutatingwebhookconfigurations/mutating-cfg
+    uid: a4acc138-d637-47ec-9338-d4fc5a4e9602
+  webhooks:
+  - admissionReviewVersions:
+    - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR1RENDQXFDZ0F3SUJBZ0lVRHNmVG9URk44RzQxSEpnZEVjRFA3K3p0azdnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1lURUxNQWtHQTFVRUJoTUNRMDR4RVRBUEJnTlZCQWdUQ0VoaGJtZGFhRzkxTVFzd0NRWURWUVFIRXdKWQpVekVNTUFvR0ExVUVDaE1EYXpoek1ROHdEUVlEVlFRTEV3WlRlWE4wWlcweEV6QVJCZ05WQkFNVENtdDFZbVZ5CmJtVjBaWE13SUJjTk1qQXhNakl4TURFMU1UQXdXaGdQTWpFeU1ERXhNamN3TVRVeE1EQmFNR0V4Q3pBSkJnTlYKQkFZVEFrTk9NUkV3RHdZRFZRUUlFd2hJWVc1bldtaHZkVEVMTUFrR0ExVUVCeE1DV0ZNeEREQUtCZ05WQkFvVApBMnM0Y3pFUE1BMEdBMVVFQ3hNR1UzbHpkR1Z0TVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOCkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZoYTdqaEpmTkhqQk0veTVKUytoVnBhNmxjRnkKZ2hBV0Znb1ozZUozMDJCTmJZbGQvRHl0S1ZBVktPQ0trdU1RSnAyMVNGdWFwSmx4Ry9DbXJuNDNoNlJJVEhWRQpmMFNqdHp3aEZNTkRaY3drZC9NcllwenMvZklwZDZHYW1Sek5IMVNuZ3AxOGpEL3h6dlJ4Z0JKZmxHUGFnUTkxCkYvSjhjZG5CNEhlWFMrL1RNcnYzZUMwNFk1L1NXK3NwZFVBSXFXMytaTlVITmdHS2cvYXZtd0lZcjZhMDl0QTcKa1lnNGRzTHQvTWV6WWtQRjdDTDVhWnpROWFFWFZCaG1UWW1PL0c4K0JhOHpRcTh3VmNudGdLZTd0amEzWWYzcwpwcCtPNGFYbnZYRlZId0xjdDBvWENKa3Y2b1ZBd1ZqazFUcUlVaEdvY1cvVzJRN2xxb2lmemFnRm1RSURBUUFCCm8yWXdaREFPQmdOVkhROEJBZjhFQkFNQ0FRWXdFZ1lEVlIwVEFRSC9CQWd3QmdFQi93SUJBakFkQmdOVkhRNEUKRmdRVTc3Q083NnBWWmRjMHZYWHlOMnhObk4rUzJTWXdId1lEVlIwakJCZ3dGb0FVNzdDTzc2cFZaZGMwdlhYeQpOMnhObk4rUzJTWXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBREtxQ3IwSlBFaXdMVUhrUG5IQkVPS3ZTZForCmZINmM5MHN3dW1MaWNrREIvVUZ2Wmp4N2JMY3VEUzcvNHFqSFAxMS9pQ3Q0YzduSzVYWVhQU1YxY0l1MUliM0cKRWZ4VXZiNWkrajJFYkl4QkI1ckNidm0yNXN0MmVqQ3ZoUm1NbWswRFhLem9NTktIUUtNNlhUMkFxWkwwMWFPaAp4bVlBM0NEeDdyRmR3alBtNit3Mlc1b3FqellyZ3dNamJnY3NxM1crVXB3T1ltUWZ5TzBVYndIZWlzREI1N2NWCkdrN09wM2NrMFJYUXZQTDk3c09Ya2cwcFhjRW5KRXM5Y3RkQTBNNmRjbnM2bW1OZDkyK05WLzJTZFhjMEtkek8KRGNJOGdvai9UcnJiUnB5QVVmcTBTNFh5V3dlbnJrZ2dmL0FXNDlkanpwMFhsTzV4a25SQXFBMlU3bGc9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      service:
+        name: svcName
+        namespace: default
+        path: /mutate-time-core-v1-pod
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: mpod.time.kb.io
+    namespaceSelector: {}
+    objectSelector: {}
+    reinvocationPolicy: Never
+    rules:
+    - apiGroups:
+      - ""
+      apiVersions:
+      - v1
+      operations:
+      - CREATE
+      - UPDATE
+      resources:
+      - pods
+      scope: '*'
+    sideEffects: Unknown
+    timeoutSeconds: 30
+- apiVersion: admissionregistration.k8s.io/v1beta1
+  kind: ValidatingWebhookConfiguration
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"admissionregistration.k8s.io/v1beta1","kind":"ValidatingWebhookConfiguration","metadata":{"annotations":{},"name":"validating-cfg"},"webhooks":[{"clientConfig":{"caBundle":"Cg==","service":{"name":"webhook-service","namespace":"system","path":"/validate-time-core-v1-pod"}},"failurePolicy":"Ignore","name":"vpod.time.kb.io","rules":[{"apiGroups":[""],"apiVersions":["v1"],"operations":["CREATE","UPDATE"],"resources":["pods"]}]}]}
+    creationTimestamp: "2021-04-07T07:22:48Z"
+    generation: 2
+    name: validating-cfg
+    resourceVersion: "70813324"
+    selfLink: /apis/admissionregistration.k8s.io/v1beta1/validatingwebhookconfigurations/validating-cfg
+    uid: 8630f56b-7277-424e-a7a5-ac0b23ad486e
+  webhooks:
+  - admissionReviewVersions:
+    - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR1RENDQXFDZ0F3SUJBZ0lVRHNmVG9URk44RzQxSEpnZEVjRFA3K3p0azdnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1lURUxNQWtHQTFVRUJoTUNRMDR4RVRBUEJnTlZCQWdUQ0VoaGJtZGFhRzkxTVFzd0NRWURWUVFIRXdKWQpVekVNTUFvR0ExVUVDaE1EYXpoek1ROHdEUVlEVlFRTEV3WlRlWE4wWlcweEV6QVJCZ05WQkFNVENtdDFZbVZ5CmJtVjBaWE13SUJjTk1qQXhNakl4TURFMU1UQXdXaGdQTWpFeU1ERXhNamN3TVRVeE1EQmFNR0V4Q3pBSkJnTlYKQkFZVEFrTk9NUkV3RHdZRFZRUUlFd2hJWVc1bldtaHZkVEVMTUFrR0ExVUVCeE1DV0ZNeEREQUtCZ05WQkFvVApBMnM0Y3pFUE1BMEdBMVVFQ3hNR1UzbHpkR1Z0TVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOCkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZoYTdqaEpmTkhqQk0veTVKUytoVnBhNmxjRnkKZ2hBV0Znb1ozZUozMDJCTmJZbGQvRHl0S1ZBVktPQ0trdU1RSnAyMVNGdWFwSmx4Ry9DbXJuNDNoNlJJVEhWRQpmMFNqdHp3aEZNTkRaY3drZC9NcllwenMvZklwZDZHYW1Sek5IMVNuZ3AxOGpEL3h6dlJ4Z0JKZmxHUGFnUTkxCkYvSjhjZG5CNEhlWFMrL1RNcnYzZUMwNFk1L1NXK3NwZFVBSXFXMytaTlVITmdHS2cvYXZtd0lZcjZhMDl0QTcKa1lnNGRzTHQvTWV6WWtQRjdDTDVhWnpROWFFWFZCaG1UWW1PL0c4K0JhOHpRcTh3VmNudGdLZTd0amEzWWYzcwpwcCtPNGFYbnZYRlZId0xjdDBvWENKa3Y2b1ZBd1ZqazFUcUlVaEdvY1cvVzJRN2xxb2lmemFnRm1RSURBUUFCCm8yWXdaREFPQmdOVkhROEJBZjhFQkFNQ0FRWXdFZ1lEVlIwVEFRSC9CQWd3QmdFQi93SUJBakFkQmdOVkhRNEUKRmdRVTc3Q083NnBWWmRjMHZYWHlOMnhObk4rUzJTWXdId1lEVlIwakJCZ3dGb0FVNzdDTzc2cFZaZGMwdlhYeQpOMnhObk4rUzJTWXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBREtxQ3IwSlBFaXdMVUhrUG5IQkVPS3ZTZForCmZINmM5MHN3dW1MaWNrREIvVUZ2Wmp4N2JMY3VEUzcvNHFqSFAxMS9pQ3Q0YzduSzVYWVhQU1YxY0l1MUliM0cKRWZ4VXZiNWkrajJFYkl4QkI1ckNidm0yNXN0MmVqQ3ZoUm1NbWswRFhLem9NTktIUUtNNlhUMkFxWkwwMWFPaAp4bVlBM0NEeDdyRmR3alBtNit3Mlc1b3FqellyZ3dNamJnY3NxM1crVXB3T1ltUWZ5TzBVYndIZWlzREI1N2NWCkdrN09wM2NrMFJYUXZQTDk3c09Ya2cwcFhjRW5KRXM5Y3RkQTBNNmRjbnM2bW1OZDkyK05WLzJTZFhjMEtkek8KRGNJOGdvai9UcnJiUnB5QVVmcTBTNFh5V3dlbnJrZ2dmL0FXNDlkanpwMFhsTzV4a25SQXFBMlU3bGc9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      service:
+        name: svcName
+        namespace: default
+        path: /validate-time-core-v1-pod
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: vpod.time.kb.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+    - apiGroups:
+      - ""
+      apiVersions:
+      - v1
+      operations:
+      - CREATE
+      - UPDATE
+      resources:
+      - pods
+      scope: '*'
+    sideEffects: Unknown
+    timeoutSeconds: 30
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
