@@ -1,4 +1,4 @@
-module github.com/cuisongliu/kube-webhook/v1
+module github.com/cuisongliu/webhook
 
 go 1.13
 

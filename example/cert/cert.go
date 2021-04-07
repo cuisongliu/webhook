@@ -17,7 +17,7 @@ package main
 
 import (
 	"fmt"
-	v1 "github.com/cuisongliu/kube-webhook/v1"
+	v1 "github.com/cuisongliu/webhook"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"os"
 )
@@ -28,12 +28,12 @@ func main() {
 	namespace := make(map[string]*metav1.LabelSelector)
 	fmt.Printf("certDir: %s\n", certDir)
 	w := &v1.CertWebHook{
-		Subject:     nil, //证书数据
-		CertDir:     certDir, //生成的证书位置
+		Subject:     nil,       //证书数据
+		CertDir:     certDir,   //生成的证书位置
 		Namespace:   "default", //秘钥以及webhook的svc的namespace
 		ServiceName: "svcName", //生成webhook的对应service名称
-		SecretName:  "certs", //存放证书名称
-		CsrName:     "csr", //csr证书资源名称
+		SecretName:  "certs",   //存放证书名称
+		CsrName:     "csr",     //csr证书资源名称
 		WebHook: []v1.WebHook{
 			{MutatingName: "mutating-cfg", ObjectSelect: obj, NamespaceSelect: namespace},
 			{ValidatingName: "validating-cfg", ObjectSelect: obj, NamespaceSelect: namespace},

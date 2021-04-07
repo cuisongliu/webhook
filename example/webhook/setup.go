@@ -16,7 +16,7 @@ limitations under the License.
 package webhook
 
 import (
-	v1 "github.com/cuisongliu/kube-webhook/v1"
+	v1 "github.com/cuisongliu/webhook"
 	hpav1 "k8s.io/api/autoscaling/v2beta1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
