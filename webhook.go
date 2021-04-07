@@ -52,6 +52,10 @@ type WebhookObject struct {
 func (wko *WebhookObject) Init() {
 	_ = wko.Webhook.(inject.Client).InjectClient(wko.Client)
 	wko.Webhook.IntoRuntimeObject(wko.Obj)
-	wko.WK.Register(wko.ValidatingPath, ValidatingWebhookFor(wko.Webhook.(Validator)))
-	wko.WK.Register(wko.DefaultingPath, DefaultingWebhookFor(wko.Webhook.(Defaulter)))
+	if v,ok:=wko.Webhook.(Validator);ok{
+		wko.WK.Register(wko.ValidatingPath, ValidatingWebhookFor(v))
+	}
+	if m,ok:=wko.Webhook.(Defaulter);ok{
+		wko.WK.Register(wko.DefaultingPath, DefaultingWebhookFor(m))
+	}
 }
