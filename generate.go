@@ -17,6 +17,7 @@ package webhook
 
 import (
 	"flag"
+	"github.com/pkg/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -89,10 +90,7 @@ func (c *CertWebHook) Init() error {
 		c.CsrName = "webhook-csr"
 	}
 	if c.WebHook == nil || len(c.WebHook) == 0 {
-		c.WebHook = []WebHook{
-			{MutatingName: "mutating-webhook-configuration"},
-			{ValidatingName: "validating-webhook-configuration"},
-		}
+		return errors.New("webhook未配置，请配置后重新操作。")
 	}
 	var err error
 
