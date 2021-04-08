@@ -25,7 +25,7 @@ import (
 
 // Defaulter defines functions for setting defaults on resources
 type Defaulter interface {
-	Default()
+	Default(req admission.Request)
 	RuntimeObject
 }
 
@@ -64,7 +64,7 @@ func (h *mutatingHandler) Handle(ctx context.Context, req admission.Request) adm
 	}
 	h.defaulter.IntoRuntimeObject(into)
 	// Default the object
-	h.defaulter.Default()
+	h.defaulter.Default(req)
 	marshalled, err := json.Marshal(h.defaulter.OutRuntimeObject())
 	if err != nil {
 		return admission.Errored(http.StatusInternalServerError, err)

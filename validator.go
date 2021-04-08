@@ -37,15 +37,14 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 
 	"k8s.io/api/admission/v1beta1"
-	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // Validator defines functions for validating an operation
 type Validator interface {
 	RuntimeObject
-	ValidateCreate() error
-	ValidateUpdate(old runtime.Object) error
-	ValidateDelete() error
+	ValidateCreate(req admission.Request) error
+	ValidateUpdate(req admission.Request) error
+	ValidateDelete(req admission.Request) error
 }
 
 // ValidatingWebhookFor creates a new Webhook for validating the provided type.
@@ -73,50 +72,27 @@ func (h *validatingHandler) Handle(ctx context.Context, req admission.Request) a
 	if h.validator == nil {
 		panic("validator should never be nil")
 	}
+	into := &unstructured.Unstructured{}
+	err := h.decoder.DecodeRaw(req.OldObject, into)
+	h.validator.IntoRuntimeObject(into)
+	if err != nil {
+		return admission.Errored(http.StatusBadRequest, err)
+	}
 	// Get the object in the request
 	if req.Operation == v1beta1.Create {
-		into := &unstructured.Unstructured{}
-		err := h.decoder.Decode(req, into)
-		h.validator.IntoRuntimeObject(into)
-		if err != nil {
-			return admission.Errored(http.StatusBadRequest, err)
-		}
-		err = h.validator.ValidateCreate()
+		err = h.validator.ValidateCreate(req)
 		if err != nil {
 			return admission.Denied(err.Error())
 		}
 	}
-
 	if req.Operation == v1beta1.Update {
-		oldObj := h.validator.OutRuntimeObject().DeepCopyObject()
-		into := &unstructured.Unstructured{}
-		err := h.decoder.DecodeRaw(req.Object, into)
-		h.validator.IntoRuntimeObject(into)
-		if err != nil {
-			return admission.Errored(http.StatusBadRequest, err)
-		}
-		err = h.decoder.DecodeRaw(req.OldObject, oldObj)
-		if err != nil {
-			return admission.Errored(http.StatusBadRequest, err)
-		}
-
-		err = h.validator.ValidateUpdate(oldObj)
+		err = h.validator.ValidateUpdate(req)
 		if err != nil {
 			return admission.Denied(err.Error())
 		}
 	}
-
 	if req.Operation == v1beta1.Delete {
-		// In reference to PR: https://github.com/kubernetes/kubernetes/pull/76346
-		// OldObject contains the object being deleted
-		into := &unstructured.Unstructured{}
-		err := h.decoder.DecodeRaw(req.OldObject, into)
-		h.validator.IntoRuntimeObject(into)
-		if err != nil {
-			return admission.Errored(http.StatusBadRequest, err)
-		}
-
-		err = h.validator.ValidateDelete()
+		err = h.validator.ValidateDelete(req)
 		if err != nil {
 			return admission.Denied(err.Error())
 		}
