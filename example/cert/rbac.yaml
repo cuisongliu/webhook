@@ -12,18 +12,9 @@ rules:
   - apiGroups: [""]
     resources: ["secrets", "configmaps"]
     verbs: ["get"]
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["create"]
   - apiGroups: ["admissionregistration.k8s.io"]
     resources: ["mutatingwebhookconfigurations", "ValidatingWebhookConfigurations"]
     verbs: ["get","list","patch","update"]
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["update"]
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["delete"]
   - apiGroups:
       - certificates.k8s.io
     resources:

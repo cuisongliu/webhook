@@ -32,7 +32,6 @@ func main() {
 		CertDir:     certDir,   //生成的证书位置
 		Namespace:   "default", //秘钥以及webhook的svc的namespace
 		ServiceName: "svcName", //生成webhook的对应service名称
-		SecretName:  "certs",   //存放证书名称
 		CsrName:     "csr",     //csr证书资源名称
 		WebHook: []v1.WebHook{
 			{MutatingName: "mutating-cfg", ObjectSelect: obj, NamespaceSelect: namespace},
