@@ -21,7 +21,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -56,7 +55,7 @@ func (a *HPAWebhook) InjectClient(c client.Client) error {
 var _ v1.Defaulter = &HPAWebhook{}
 
 // Default implements webhook.Defaulter so a webhook will be registered for the type
-func (r *HPAWebhook) Default(req admission.Request) {
+func (r *HPAWebhook) Default() {
 	hpalog.Info("default", "name", r.object.Name)
 	// TODO(user): fill in your defaulting logic.
 }
@@ -67,19 +66,19 @@ func (r *HPAWebhook) Default(req admission.Request) {
 var _ v1.Validator = &HPAWebhook{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *HPAWebhook) ValidateCreate(req admission.Request) error {
+func (r *HPAWebhook) ValidateCreate() error {
 	hpalog.Info("validate create", "name", r.object.Name)
 	return nil
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *HPAWebhook) ValidateUpdate(req admission.Request) error {
+func (r *HPAWebhook) ValidateUpdate(old runtime.Object) error {
 	hpalog.Info("validate update", "name", r.object.Name)
 	return nil
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *HPAWebhook) ValidateDelete(req admission.Request) error {
+func (r *HPAWebhook) ValidateDelete() error {
 	hpalog.Info("validate delete", "name", r.object.Name)
 	return nil
 }

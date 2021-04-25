@@ -41,6 +41,7 @@ type CertWebHook struct {
 	//kubernetes相关资源
 	Namespace   string
 	ServiceName string
+	SecretName  string
 	CsrName     string
 	WebHook     []WebHook
 
@@ -82,6 +83,9 @@ func (c *CertWebHook) Init() error {
 	if c.ServiceName == "" {
 		c.ServiceName = "webhook-service"
 	}
+	if c.SecretName == "" {
+		c.SecretName = "webhook-secret"
+	}
 	if c.CsrName == "" {
 		c.CsrName = "webhook-csr"
 	}
@@ -99,14 +103,14 @@ func (c *CertWebHook) Init() error {
 }
 
 func (c *CertWebHook) Generator() error {
-	data, err := c.generateCert()
+	secret, err := c.generateSecret()
 	if err != nil {
 		return err
 	}
-	if err := c.patchWebHook(string(data[caBundleKey])); err != nil {
+	if err := c.patchWebHook(string(secret.Data[caBundleKey])); err != nil {
 		return err
 	}
-	if err := c.writeTLSFiles(data[certKey], data[keyKey]); err != nil {
+	if err := c.writeTLSFiles(secret.Data[certKey], secret.Data[keyKey]); err != nil {
 		return err
 	}
 	return nil

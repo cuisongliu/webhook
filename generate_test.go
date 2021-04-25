@@ -28,6 +28,7 @@ func TestCertWebHook_Generator(t *testing.T) {
 		CertDir     string
 		Namespace   string
 		ServiceName string
+		SecretName  string
 		CsrName     string
 		WebHook     []WebHook
 		client      *kubernetes.Clientset
@@ -42,6 +43,7 @@ func TestCertWebHook_Generator(t *testing.T) {
 			CertDir:     "/Users/cuisongliu",
 			Namespace:   "default",
 			ServiceName: "service",
+			SecretName:  "webhook-cert",
 			CsrName:     "webhook-csr",
 			WebHook: []WebHook{
 				{
@@ -65,6 +67,7 @@ func TestCertWebHook_Generator(t *testing.T) {
 				CertDir:     tt.fields.CertDir,
 				Namespace:   tt.fields.Namespace,
 				ServiceName: tt.fields.ServiceName,
+				SecretName:  tt.fields.SecretName,
 				CsrName:     tt.fields.CsrName,
 				WebHook:     tt.fields.WebHook,
 				client:      tt.fields.client,

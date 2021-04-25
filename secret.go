@@ -18,6 +18,7 @@ package webhook
 import (
 	"io/ioutil"
 	"k8s.io/api/certificates/v1beta1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
@@ -33,17 +34,34 @@ const (
 	caBundleKey = "caBundle"
 )
 
-func (c *CertWebHook) generateCert() (map[string][]byte, error) {
-	csr, key, err := c.generateTLS()
+func (c *CertWebHook) generateSecret() (*corev1.Secret, error) {
+	secret, err := c.client.CoreV1().Secrets(c.Namespace).Get(c.SecretName, v1.GetOptions{})
 	if err != nil {
-		return nil, err
-	}
-	data := map[string][]byte{
-		csrKey: csr,
-		keyKey: key,
+		if !errors.IsNotFound(err) {
+			return nil, err
+		}
+		csr, key, err := c.generateTLS()
+		if err != nil {
+			return nil, err
+		}
+
+		secret = &corev1.Secret{
+			ObjectMeta: v1.ObjectMeta{
+				Namespace: c.Namespace,
+				Name:      c.SecretName,
+			},
+			Data: map[string][]byte{
+				csrKey: csr,
+				keyKey: key,
+			},
+		}
+		secret, err = c.client.CoreV1().Secrets(c.Namespace).Create(secret)
+		if err != nil {
+			return nil, err
+		}
 	}
 	//csr
-	err = c.pathCsr(data)
+	err = c.pathCsr(secret)
 	if err != nil {
 		return nil, err
 	}
@@ -58,10 +76,14 @@ func (c *CertWebHook) generateCert() (map[string][]byte, error) {
 	} else {
 		return nil, errors.NewUnauthorized("ca configmap [extension-apiserver-authentication] data [client-ca-file] is not found.")
 	}
-	data[caBundleKey] = []byte(caData)
-	return data, nil
+	secret.Data[caBundleKey] = []byte(caData)
+	secret, err = c.client.CoreV1().Secrets(c.Namespace).Update(secret)
+	if err != nil {
+		return nil, err
+	}
+	return secret, nil
 }
-func (c *CertWebHook) pathCsr(data map[string][]byte) error {
+func (c *CertWebHook) pathCsr(secret *corev1.Secret) error {
 	dPolicy := v1.DeletePropagationBackground
 	label := map[string]string{
 		"csr-name": c.CsrName,
@@ -76,7 +98,7 @@ func (c *CertWebHook) pathCsr(data map[string][]byte) error {
 		"key encipherment",
 		"server auth",
 	}
-	csrResource.Spec.Request = data[csrKey]
+	csrResource.Spec.Request = secret.Data[csrKey]
 	csrResource, err := c.client.CertificatesV1beta1().CertificateSigningRequests().Create(csrResource)
 
 	if err != nil {
@@ -101,7 +123,7 @@ func (c *CertWebHook) pathCsr(data map[string][]byte) error {
 			if event.Type == watch.Modified || event.Type == watch.Added {
 				csr := event.Object.(*v1beta1.CertificateSigningRequest)
 				if csr.Status.Certificate != nil {
-					data[certKey] = csr.Status.Certificate
+					secret.Data[certKey] = csr.Status.Certificate
 					return nil
 				}
 			}
